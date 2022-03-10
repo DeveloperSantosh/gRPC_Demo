@@ -10,13 +10,34 @@ message User{
   string password = 3;
 }
 
+message UserDetails{
+  int32 userDetailId = 1;
+  int32 age = 2;
+  string location = 3;
+  string number = 4;
+  string gender = 5;
+}
+
+message UserRole{
+  string role_type = 1;
+  string role_description = 2;
+}
 service UserService{
 
 //  unary - synchronous
-//  client will send one request and server will respond with one response.
+//  client will send one request with user and server will respond with one response.
   rpc getUser(User) returns (User){}
 
 //  server-streaming -> asynchronous
+//  Client will send one request as gender in UserDetails class and server will respond with stream of User responses
+//  matching gender as requested.
+  rpc getAllUsersByGender(UserDetails) returns (stream User){}
+
 //  client-streaming -> asynchronous
+//  client sends stream of user and server responds with one User response
+  rpc findFirstAdminUserRole(stream User) returns (User){}
+
 //  bi-directional streaming -> asynchronous
+//  client sends stream of UserDetails and servers responds with stream of User responses
+  rpc getUsersByAges(stream UserDetails) returns (stream User){}
 }
